@@ -1,5 +1,4 @@
 import boto3
-import json
 
 endpoint_url = "http://localhost:4576"
 region_name = "ap-southeast-1"
@@ -15,16 +14,23 @@ table = dynamodb.Table('message')
 # Get the queue named test
 queue = sqs.get_queue_by_name(QueueName='test-queue')
 
-# Consume all messages from queue
-def consumer(c):
-    i=0
-    while i<c:
-        # Process messages by printing out body from test Amazon SQS Queue
-        for message in queue.receive_messages():
-                print('message = {0}'.format(message.body))
-                table.put_item(
-                    Item={
-                    'body': format(message.body),
-                })
-                message.delete()
-                i=i+1
+def show():
+    # Consume all messages from queue
+    while True:
+        response = client.receive_message(
+            QueueUrl="http://localhosts:4576/000000000000/test-queue",
+            MaxNumberOfMessages=1,
+            WaitTimeSeconds=1,
+        )
+            
+        for message in response.get("Messages",[]):
+            message_body = message["Body"]
+
+        if len(response.get('Messages',[])) == 0:
+            break
+
+        else:
+            print(message_body)
+
+if __name__ == "__show__":
+    show()

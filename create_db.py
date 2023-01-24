@@ -7,23 +7,29 @@ region_name = "ap-southeast-1"
 dynamodb = boto3.resource('dynamodb', endpoint_url=endpoint_url, region_name=region_name)
 
 # Create the DynamoDB table.
-table = dynamodb.create_table(
-    TableName='message',
-    KeySchema=[
-        {
-            'AttributeName': 'body',
-            'KeyType': 'HASH'
-        }
-    ],
-    AttributeDefinitions=[
-        {
-            'AttributeName': 'body',
-            'AttributeType': 'S'
-        }
-    ],
-    ProvisionedThroughput={
-        'ReadCapacityUnits': 5,
-        'WriteCapacityUnits': 5
-    }
-)
-print(table)
+def create():
+    try:
+        table = dynamodb.create_table(
+            TableName='message',
+            KeySchema=[
+                {
+                    'AttributeName': 'body',
+                    'KeyType': 'HASH'
+                }
+            ],
+            AttributeDefinitions=[
+                {
+                    'AttributeName': 'body',
+                    'AttributeType': 'S'
+                }
+            ],
+            ProvisionedThroughput={
+                'ReadCapacityUnits': 5,
+                'WriteCapacityUnits': 5
+            }
+        )
+        return 1
+
+    except:
+        return 0
+#print('Table created: ',table.name)
